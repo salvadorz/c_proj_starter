@@ -8,8 +8,6 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-message(STATUS ${CMAKE_SOURCE_DIR})
-
 ### General Configuration ###
 
 set_property(GLOBAL PROPERTY C_STANDARD 11)
