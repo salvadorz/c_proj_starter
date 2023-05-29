@@ -22,6 +22,7 @@ set_property(GLOBAL PROPERTY C_STANDARD 11)
 set_property(GLOBAL PROPERTY CXX_STANDARD 17)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
+enable_testing()
 
 ### Compiler Flags Configuration ###
 
