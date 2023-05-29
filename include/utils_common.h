@@ -38,19 +38,19 @@
 #include <stdio.h> /*printf*/
 
 #define PRINT_DEBUG (1U)
-#define SEND()                                                                 \
-  fflush(stdin);                                                               \
+#define SEND()                                                                                     \
+  fflush(stdin);                                                                                   \
   fflush(stdout)
-#define FLUSH_AFTER_PRINTF()                                                   \
-  setvbuf(stdout, 0, _IONBF, 0);                                               \
+#define FLUSH_AFTER_PRINTF()                                                                       \
+  setvbuf(stdout, 0, _IONBF, 0);                                                                   \
   setvbuf(stdin, 0, _IONBF, 0)
 
 #if PRINT_DEBUG
-#define DEBUG_LOG(msg, ...)                                                    \
-  printf("DEBUG: " msg "\n", ##__VA_ARGS__);                                   \
+#define DEBUG_LOG(msg, ...)                                                                        \
+  printf("DEBUG: " msg "\n", ##__VA_ARGS__);                                                       \
   SEND()
-#define ERROR_LOG(msg, ...)                                                    \
-  printf("ERROR:\n " msg "\n", ##__VA_ARGS__);                                 \
+#define ERROR_LOG(msg, ...)                                                                        \
+  printf("ERROR:\n " msg "\n", ##__VA_ARGS__);                                                     \
   SEND()
 #else
 #define DEBUG_LOG(msg, ...)
@@ -95,8 +95,8 @@ typedef enum BITS_e {
   BIT7,
 } BITS_t;
 
-#define ROTATE_R_SHIFT(var, bit_size) (((var) >> 1) | ((var) << (bit_size - 1)))
-#define ROTATE_L_SHIFT(var, bit_size) (((var) << 1) | ((var) >> (bit_size - 1)))
+#define ROTATE_R_SHIFT(var, bit_size) (((var) >> 1) | ((var) << ((bit_size) - 1)))
+#define ROTATE_L_SHIFT(var, bit_size) (((var) << 1) | ((var) >> ((bit_size) - 1)))
 
 #define ROTATE_BYTE_R_POS(var, n_pos)                                          \
   (((var) >> ((n_pos) % 8U)) | ((var) << (8U - ((n_pos) % 8U))))

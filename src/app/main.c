@@ -39,8 +39,7 @@ int test_case_number = 0;
 
 static void test_check(bool result) {
 
-  printf("%s Test #%d\n",
-         (result) ? (const char *)PASSED_MARK : (const char *)FAILED_MARK,
+  printf("%s Test #%d\n", (result) ? (const char *)PASSED_MARK : (const char *)FAILED_MARK,
          ++test_case_number);
 }
 

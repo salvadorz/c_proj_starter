@@ -26,19 +26,19 @@
  * @file strio.c
  * @author Salvador Z
  * @date 25 May 2023
- * @brief File for Common utils handling string to common data
+ * @brief File for Common utils handling string utilities
  *
  */
 
 #include "strio.h"  /*public header*/
 #include <stdint.h> /*UINT16_MAX*/
 
-uint16_t str_len(char const *s) {
-  uint16_t len = 0u;
+uint16_t str_len(char const *const s) {
+  uint16_t len = 0U;
 
   if ((NULL != s) && ('\0' != *s)) {
 
-    while ('\0' != *s++) {
+    while ('\0' != s[len]) {
       ++len;
       if (UINT16_MAX == len)
         break;
