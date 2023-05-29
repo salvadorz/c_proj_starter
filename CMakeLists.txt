@@ -16,6 +16,9 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+### Build Options ###
+option(ENABLE_FORMAT "Enable format analysis with clang-format" ON)
+
 ### General Configuration ###
 
 set_property(GLOBAL PROPERTY C_STANDARD 11)
@@ -35,6 +38,16 @@ set(CMAKE_C_FLAGS_RELEASE "-O3")
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
+### Enabling CMAKE Modules
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+##########################
+# Enable Static Analysis #
+##########################
+#include(analysis/clang-tidy)
+include(analysis/clang-format)
+
 
 ### General Project Structure ###
 

@@ -1,0 +1,15 @@
+BasedOnStyle: LLVM
+Language:     Cpp
+Standard:     Cpp11
+IndentWidth:  2
+ColumnLimit: 100
+UseTab: Never
+#Standard: Auto
+# Indent width for line continuations.
+ContinuationIndentWidth: 8 #4
+# The extra indent or outdent of access modifiers (e.g., public)
+AccessModifierOffset:   -4   #-2
+# Function call arguments do not always have to have their own line if they don't fit on one line
+BinPackParameters:      true
+SortIncludes:           true
+
