@@ -57,7 +57,7 @@ shift $((OPTIND -1))
 
 # Make a search on whole project if -a is used
 if [ "$ALL" = true ]; then
-  sources=$(find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" \) ! -path "./build/*")
+  sources=$(find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" \) ! -path "./build/*" ! -path "./artifacts/*")
   echo "Running clang-format on all source files from the project"
   clang-format --dry-run --ferror-limit=3 -style=file -i -fallback-style=LLVM $sources
   exit 0
