@@ -17,12 +17,14 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 ### Build Options ###
-option(ENABLE_FORMAT "Enable format analysis with clang-format" ON)
+option(ENABLE_FORMAT  "Enable format analysis with clang-format" ON)
+option(ENABLE_CODEGCOV  "Enable coverage reporting"              ON)
 
 ### General Configuration ###
 
 set_property(GLOBAL PROPERTY C_STANDARD 11)
 set_property(GLOBAL PROPERTY CXX_STANDARD 17)
+set(CMAKE_C_OUTPUT_EXTENSION_REPLACE   ON)
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
 enable_testing()
@@ -47,7 +49,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 ##########################
 #include(analysis/clang-tidy)
 include(analysis/clang-format)
-
+include(analysis/code-coverage)
 
 ### General Project Structure ###
 
