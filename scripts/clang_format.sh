@@ -23,19 +23,31 @@
 
 set -e
 
-EXCLUDES_ARGS=
-PATCH='0'
-ALL='0'
+EXCLUDES_ARGS=""
+PATCH=false
+ALL=false
+
+# Usage helper
+print_usage() {
+  echo "Usage: format.sh [options] DIRS TYPES"
+  echo "Options:"
+  echo "  -e: Specifies a comma-separated list of directories to exclude from formatting."
+  echo "  -p: Generates a patch file using 'git'."
+  echo "  -a: Performs a search of source code files in the current project directory."
+  echo ""
+  echo "Example usage:"
+  echo "  format.sh -e src/pid,src/external src,include *.c,*.h,*.cpp,*.hpp"
+}
 
 while getopts "e:pa" opt; do
   case $opt in
     e) EXCLUDES_ARGS="$OPTARG"
     ;;
-    p) PATCH='1'
+    p) PATCH=true
     ;;
-    a) ALL='1'
+    a) ALL=true
     ;;
-    \?) echo "Invalid option -$OPTARG" >&2
+    \?) print_usage; exit 1 >&2
     ;;
   esac
 done
@@ -43,41 +55,23 @@ done
 # Shift off the getopts args, leaving us with positional args
 shift $((OPTIND -1))
 
-if [ "$ALL" == '1' ]; then
-  sources=$(find . -regextype posix-extended -regex \
-  ".*\.(c|cpp|cxx|cc|hpp|hxx|h)" |
-  grep -vE "^./(build)/")
-  #echo "Found this sources ${sources}"
+# Make a search on whole project if -a is used
+if [ "$ALL" = true ]; then
+  sources=$(find . -type f \( -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" \) ! -path "./build/*")
   echo "Running clang-format on all source files from the project"
-  clang-format --dry-run --ferror-limit=3 -style=file ${sources} -i -fallback-style=LLVM
+  clang-format --dry-run --ferror-limit=3 -style=file -i -fallback-style=LLVM $sources
   exit 0
 fi
 
-DIRS=
 # Parse $1 into a list of directories
-IFS=',' read -ra ENTRIES <<< "$1"
-for entry in "${ENTRIES[@]}"; do
-	DIRS="$DIRS $entry"
-done
+DIRS=$(printf " %s" "${1//,/ }")
 
 # Parse $2 into file-type arguments
-FILE_TYPES=
-IFS=',' read -ra ENTRIES <<< "$2"
-for entry in "${ENTRIES[@]}"; do
-	FILE_TYPES="$FILE_TYPES -o -iname $entry"
-done
+FILE_TYPES=$(printf " -o -iname %s" "${2//,/ -o -iname }")
 
 # Parse $3 into the exclude arguments
-EXCLUDES=
-IFS=',' read -ra ENTRIES <<< "$EXCLUDES_ARGS"
-for entry in "${ENTRIES[@]}"; do
-	EXCLUDES="$EXCLUDES -o -path $entry"
-done
-
-if [[ ! -z $EXCLUDES ]]; then
-	# Remove the initial `-o` argument for a single/first directory
-	EXCLUDES=${EXCLUDES:3:${#EXCLUDES}}
-
+if [[ -n $EXCLUDES_ARGS ]]; then
+  EXCLUDES=$(printf " -path %s" "${EXCLUDES_ARGS//,/ -o -path }")
 	# Create the final argument string
 	EXCLUDES="-type d \( $EXCLUDES \) -prune"
 else
@@ -91,9 +85,9 @@ echo "EXCLUDES: ${EXCLUDES}"
 echo "FILE_TYPES: ${FILE_TYPES}"
 
 eval find $DIRS $EXCLUDES -type f $FILE_TYPES \
-	| xargs echo #clang-format -style=file -i -fallback-style=LLVM
+	| xargs clang-format -style=file -i -fallback-style=LLVM
 
-if [ "$PATCH" == '1' ]; then
+if [ "$PATCH" == true ]; then
 	git diff > clang_format.patch
 
 	# Delete if 0 size

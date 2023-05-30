@@ -44,7 +44,7 @@ set(CLANG_FORMAT_ADDITIONAL_DIRS tests include)
 if(CLANG_FORMAT)
   ### Supply argument defaults
   if(NOT CLANG_FORMAT_EXCLUDE_DIRS)
-    set(CLANG_FORMAT_EXCLUDE_DIRS "" CACHE STRING "CMake list of directories to exclude form clang-format.")
+    set(CLANG_FORMAT_EXCLUDE_DIRS "")
   endif()
 
   if(NOT CLANG_FORMAT_INCLUDE_DIRS)
@@ -64,10 +64,13 @@ if(CLANG_FORMAT)
   endif()
 
   ### Convert variables into script format
-  if(CLANG_FORMAT_EXCLUDE_ARG)
+  if(CLANG_FORMAT_EXCLUDE_DIRS)
     string(REPLACE ";" "," CLANG_FORMAT_EXCLUDE_ARG "${CLANG_FORMAT_EXCLUDE_DIRS}")
     set(CLANG_FORMAT_EXCLUDE_ARG "-e ${CLANG_FORMAT_EXCLUDE_ARG}")
+  else()
+    set(CLANG_FORMAT_EXCLUDE_ARG "")
   endif()
+
   string(REPLACE ";" "," CLANG_FORMAT_INCLUDE_ARG "${CLANG_FORMAT_INCLUDE_DIRS}")
   string(REPLACE ";" "," CLANG_FORMAT_FILETYPES_ARG "${CLANG_FORMAT_FILETYPES}")
 
