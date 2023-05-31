@@ -18,7 +18,9 @@ endif()
 
 ### Build Options ###
 option(ENABLE_FORMAT  "Enable format analysis with clang-format" ON)
-option(ENABLE_CODEGCOV  "Enable coverage reporting"              ON)
+option(ENABLE_CODEGCOV  "Enable coverage reporting"              OFF)
+# Automated Code Coverage using GCOV, LCOV and GENHTML
+option(ENABLE_COVERAGE  "Enable code coverage report and HTML  " ON)
 
 ### General Configuration ###
 
@@ -48,8 +50,16 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Enable Static Analysis #
 ##########################
 #include(analysis/clang-tidy)
+if(ENABLE_FORMAT)
 include(analysis/clang-format)
-include(analysis/code-coverage)
+endif()
+if(ENABLE_CODEGCOV)
+  include(analysis/code-coverage)
+endif()
+if(ENABLE_COVERAGE)
+  include(analysis/CodeCoverage)
+  APPEND_COVERAGE_COMPILER_FLAGS()
+endif()
 
 ### General Project Structure ###
 
