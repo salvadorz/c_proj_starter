@@ -30,10 +30,14 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Configure CMake project
+    - name: Configure CMake project
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Configure CMake project
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
@@ -42,10 +46,10 @@ jobs:
     runs-on: self-hosted
     needs: configure
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+    - uses: actions/checkout@v3
 
-      - name: Run clang-format
+    - name: Run clang-format
         working-directory: ./build/
         run: make clang-format
 
@@ -53,10 +57,10 @@ jobs:
     runs-on: self-hosted
     needs: configure
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+    - uses: actions/checkout@v3
 
-      - name: Build project
+    - name: Build project
         working-directory: ./build/
         run: make -j$(nproc --all) all
 
@@ -64,10 +68,10 @@ jobs:
     runs-on: self-hosted
     needs: build
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+    - uses: actions/checkout@v3
 
-      - name: Run tests
+    - name: Run tests
         working-directory: ./build/
         run: ctest -vv
 
@@ -75,10 +79,10 @@ jobs:
     runs-on: self-hosted
     needs: build
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+    - uses: actions/checkout@v3
 
-      - name: Enable coverage
+    - name: Enable coverage
         working-directory: ./build/
         run: |
           cmake -DENABLE_COVERAGE=ON ..
@@ -90,10 +94,10 @@ jobs:
     runs-on: self-hosted
     needs: build
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+    - uses: actions/checkout@v3
 
-      - name: Deploy artifacts
+    - name: Deploy artifacts
         working-directory: ./build/
         run: |
           echo "Build succeeded, archiving artifacts..."
