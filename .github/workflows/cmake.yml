@@ -81,7 +81,11 @@ jobs:
 
           - name: Deploy artifacts
             run: |
-              echo "Build succeded, archiving artifacts..."
+              echo "Build succeeded, archiving artifacts..."
               make -j$(nproc --all) install
             working-directory: ${{github.workspace}}/build
-
+            artifacts:
+              name: bow_artifacts
+              expires-in: 1 week
+              paths:
+                - results/
