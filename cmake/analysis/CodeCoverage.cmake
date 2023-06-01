@@ -1,4 +1,5 @@
 # Copyright (c) 2012 - 2017, Lars Bilke
+# src: https://github.com/bilke/cmake-modules/blob/master/CodeCoverage.cmake
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification,

@@ -15,8 +15,6 @@ on:
   pull_request:
     branches:
       - develop
-    types:
-      - closed
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -84,7 +82,7 @@ jobs:
               echo "Build succeeded, archiving artifacts..."
               make -j$(nproc --all) install
             working-directory: ${{github.workspace}}/build
-            artifacts:
+            artifacts
               name: bow_artifacts
               expires-in: 1 day
               paths:
