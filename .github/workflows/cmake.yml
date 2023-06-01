@@ -63,13 +63,25 @@ jobs:
 
           - name: Code coverage Report
             run: |
-              cmake -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=${{env.BUILD_DTYPE}} ..
               make clean
+              cmake -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=${{env.BUILD_DTYPE}} ..
               make -j$(nproc --all) all
               make coverage
             working-directory: ${{github.workspace}}/build
 
           - name: Running test
             run: ctest -vv
+            working-directory: ${{github.workspace}}/build
+
+    deploy:
+        runs-on: self-hosted
+        needs: coverage
+        steps:
+          - uses: actions/checkout@v3
+
+          - name: Deploy artifacts
+            run: |
+              echo "Build succeded, archiving artifacts..."
+              make -j$(nproc --all) install
             working-directory: ${{github.workspace}}/build
 
