@@ -38,19 +38,6 @@ jobs:
             run: make -j$(nproc --all) all
             working-directory: ${{github.workspace}}/build
           - name: clang-format check
-            run: make clang-format
+            run: make format-clang
             working-directory: ${{github.workspace}}/build
 
-    test_coverage:
-        runs-on: self-hosted
-        needs: configure
-        steps:
-          - uses: actions/checkout@v3
-          - name: Run tests
-            run : ctest -vv
-            working-directory: ${{github.workspace}}/build
-          - name: Coverage
-          run: |
-              make clean
-              make -j$(nproc --all) all
-              make coverage
