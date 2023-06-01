@@ -51,7 +51,7 @@ jobs:
 
     - name: Run clang-format
       run: make clang-format
-        working-directory: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build
 
   build:
     runs-on: self-hosted
@@ -62,7 +62,7 @@ jobs:
 
     - name: Build project
       run: make -j$(nproc --all) all
-        working-directory: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build
 
   test:
     runs-on: self-hosted
@@ -73,7 +73,7 @@ jobs:
 
     - name: Run tests
       run: ctest -vv
-        working-directory: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build
 
   coverage:
     runs-on: self-hosted
@@ -83,7 +83,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Enable coverage
-          working-directory: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build
       run: |
         cmake -DENABLE_COVERAGE=ON ..
         make clean
@@ -98,7 +98,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Deploy artifacts
-          working-directory: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/build
       run: |
         echo "Build succeeded, archiving artifacts..."
         make -j$(nproc --all) install
