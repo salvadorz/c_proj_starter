@@ -39,6 +39,38 @@ jobs:
             run: make -j$(nproc --all) all
             working-directory: ${{github.workspace}}/build
 
+    analysis:
+        runs-on: self-hosted
+        needs: configure
+        steps:
+          - uses: actions/checkout@v3
+
+          - name: clang-format check
+            run: make format-clang
+            working-directory: ${{github.workspace}}/build
+
+          - name: Running test
+            run: ctest -vv
+            working-directory: ${{github.workspace}}/build
+
+    coverage:
+        runs-on: self-hosted
+        needs: configure
+        steps:
+          - uses: actions/checkout@v3
+
+          - name: Code coverage Report
+            run: |
+              make clean
+              cmake -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=${{env.BUILD_DTYPE}} ..
+              make -j$(nproc --all) all
+              make coverage
+            working-directory: ${{github.workspace}}/build
+
+          - name: Running test
+            run: ctest -vv
+            working-directory: ${{github.workspace}}/build
+
     deploy:
         runs-on: self-hosted
         needs: configure
@@ -50,8 +82,3 @@ jobs:
               echo "Build succeeded, archiving artifacts..."
               make -j$(nproc --all) install
             working-directory: ${{github.workspace}}/build
-              artifacts:
-                name: bow_artifacts
-                expires-in: 1 day
-                paths:
-                  - artifacts/
