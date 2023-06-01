@@ -47,12 +47,20 @@ jobs:
         steps:
           - uses: actions/checkout@v3
 
+          - name: Configure CMake project
+            # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+            run: |
+              cmake . -Bbuild -DCMAKE_BUILD_TYPE=${{env.BUILD_RTYPE}}
+              chmod ug+x scripts/clang_format.sh
+
           - name: clang-format check
             run: make format-clang
             working-directory: ${{github.workspace}}/build
 
           - name: Running test
-            run: ctest -vv
+            run: |
+              make -j$(nproc --all) all
+              ctest -vv
             working-directory: ${{github.workspace}}/build
 
     coverage:
@@ -61,16 +69,14 @@ jobs:
         steps:
           - uses: actions/checkout@v3
 
+          - name: Configure CMake project
+            # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+            run: cmake . -Bbuild -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=${{env.BUILD_DTYPE}}
+
           - name: Code coverage Report
             run: |
-              make clean
-              cmake -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=${{env.BUILD_DTYPE}} ..
               make -j$(nproc --all) all
               make coverage
-            working-directory: ${{github.workspace}}/build
-
-          - name: Running test
-            run: ctest -vv
             working-directory: ${{github.workspace}}/build
 
     deploy:
@@ -78,6 +84,10 @@ jobs:
         needs: coverage
         steps:
           - uses: actions/checkout@v3
+
+          - name: Configure CMake project
+            # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+            run: cmake . -Bbuild -DCMAKE_BUILD_TYPE=${{env.BUILD_RTYPE}}
 
           - name: Deploy artifacts
             run: |
