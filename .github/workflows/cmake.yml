@@ -40,7 +40,8 @@ jobs:
           - name: clang-format check
             run: make clang-format
             working-directory: ${{github.workspace}}/build
-    test-n-coverage:
+
+    test_coverage:
         runs-on: self-hosted
         needs: configure
         steps:
@@ -53,19 +54,3 @@ jobs:
               make clean
               make -j$(nproc --all) all
               make coverage
-
-  deploy:
-    runs-on: self-hosted
-    needs: configure
-    steps:
-      - uses: actions/checkout@v3
-      - name: Deploy artifacts
-        working-directory: ${{github.workspace}}/build
-        run: |
-          echo "Build succeeded, archiving artifacts..."
-          make -j$(nproc --all) install
-        artifacts:
-          name: bow_artifacts
-          expires-in: 1 day
-          paths:
-            - artifacts/
