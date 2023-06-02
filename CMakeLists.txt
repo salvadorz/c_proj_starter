@@ -20,7 +20,7 @@ endif()
 option(ENABLE_FORMAT  "Enable format analysis with clang-format" ON)
 option(ENABLE_CODEGCOV  "Enable coverage reporting"              OFF)
 # Automated Code Coverage using GCOV, LCOV and GENHTML
-option(ENABLE_COVERAGE  "Enable code coverage report and HTML  " ON)
+option(ENABLE_COVERAGE  "Enable code coverage report and HTML  " OFF)
 
 ### General Configuration ###
 
